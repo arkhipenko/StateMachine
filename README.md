@@ -6,6 +6,13 @@ Lightweight, table-driven state machine framework built on [TaskScheduler](https
 
 StateMachine provides a structured approach to building cooperative, non-blocking state machines for Arduino and compatible microcontrollers. It separates state behavior (actions) from state management (machine) using a table-driven transition model.
 
+---
+#### Delivering robust embedded systems and firmware that perform flawlessly in real-world conditions.
+[smart solutions for smart devices](https://smart4smart.com/)
+
+[![github](https://github.com/arkhipenko/resources/blob/master/smart4smart_large.gif)](https://smart4smart.com/)
+---
+
 ## Features
 
 - **Table-driven transitions** - Define state flows declaratively with `{fromState, exitCode, toState}` tuples
@@ -56,12 +63,12 @@ The framework provides four core abstractions:
 ├─────────────────────────────────────────────────────────────┤
 │                        smAction                             │
 │  - Implements state behavior                                │
-│  - Lifecycle: onEnter() → onRun() → onExit()               │
+│  - Lifecycle: onEnter() → onRun() → onExit()                │
 │  - Signals transitions via requestExit(code)                │
 ├─────────────────────────────────────────────────────────────┤
 │                        smDevice                             │
 │  - Optional hardware abstraction                            │
-│  - Lifecycle: begin() → start() → stop() → end()           │
+│  - Lifecycle: begin() → start() → stop() → end()            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -488,3 +495,6 @@ This library is provided as-is for use in embedded projects.
 ## Author
 
 Anatoli Arkhipenko (arkhipenko@hotmail.com)
+
+---
+[![github](https://github.com/arkhipenko/resources/blob/master/smart4smart_hero_banner.gif)](https://smart4smart.com/)
