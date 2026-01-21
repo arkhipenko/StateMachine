@@ -1,0 +1,78 @@
+#######################################
+# Syntax Coloring Map For StateMachine
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+smDevice	KEYWORD1
+smAction	KEYWORD1
+smState	KEYWORD1
+smMachine	KEYWORD1
+smTransition	KEYWORD1
+smDeviceState_t	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+# smDevice methods
+begin	KEYWORD2
+start	KEYWORD2
+stop	KEYWORD2
+end	KEYWORD2
+getState	KEYWORD2
+setState	KEYWORD2
+getName	KEYWORD2
+setName	KEYWORD2
+
+# smAction methods
+onEnter	KEYWORD2
+onRun	KEYWORD2
+onExit	KEYWORD2
+onInvalidTransition	KEYWORD2
+requestExit	KEYWORD2
+getExitCode	KEYWORD2
+resetExitCode	KEYWORD2
+setMachine	KEYWORD2
+getMachine	KEYWORD2
+
+# smState methods
+getAction	KEYWORD2
+getEnterTime	KEYWORD2
+OnEnable	KEYWORD2
+Callback	KEYWORD2
+OnDisable	KEYWORD2
+
+# smMachine methods
+execute	KEYWORD2
+stop	KEYWORD2
+isRunning	KEYWORD2
+requestTransition	KEYWORD2
+getCurrentState	KEYWORD2
+getPreviousState	KEYWORD2
+getScheduler	KEYWORD2
+getTransitionCount	KEYWORD2
+forceTransitionTo	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+EXIT_NONE	LITERAL1
+EXIT_COMPLETE	LITERAL1
+EXIT_TIMEOUT	LITERAL1
+EXIT_ERROR	LITERAL1
+EXIT_CANCEL	LITERAL1
+EXIT_ABORT	LITERAL1
+EXIT_USER	LITERAL1
+
+SM_DEFAULT_INTERVAL_MS	LITERAL1
+
+smON	LITERAL1
+smOFF	LITERAL1
+smSTARTING	LITERAL1
+smSTOPPING	LITERAL1
+
+#######################################
