@@ -1,5 +1,5 @@
 {
-  "name": "StateMachine",
+  "name": "StateMachineFramework",
   "keywords": "state machine, fsm, finite state machine, cooperative, task, scheduling",
   "description": "Lightweight table-driven state machine framework built on TaskScheduler",
   "repository":
