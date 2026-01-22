@@ -11,7 +11,6 @@
  * Required Libraries (install via Library Manager):
  *   - TaskScheduler by Anatoli Arkhipenko
  *   - OneButton by Matthias Hertel
- *   - ArduinoLog by Thijs Elenbaas
  *   - StateMachine (this framework)
  */
 
@@ -23,7 +22,6 @@
 #define _TASK_OO_CALLBACKS
 
 #include <Arduino.h>
-#include <ArduinoLog.h>
 #include <OneButton.h>
 #include "smMachine.h"
 
@@ -43,49 +41,40 @@
 // ============================================================================
 class LED : public smDevice {
 public:
-    LED(uint8_t pin) : mPin(pin), mLedOn(false) {
-        Log.trace("LED::LED() pin=%d" CR, pin);
-    }
+    LED(uint8_t pin) : mPin(pin), mLedOn(false) {}
 
     bool begin() override {
-        Log.trace("LED::begin()" CR);
         pinMode(mPin, OUTPUT);
         off();
         return true;
     }
 
     bool start() override {
-        Log.trace("LED::start()" CR);
         off();
         mState = smON;
         return true;
     }
 
     void stop() override {
-        Log.trace("LED::stop()" CR);
         off();
         mState = smOFF;
     }
 
     void end() override {
-        Log.trace("LED::end()" CR);
         off();
     }
 
     void on() {
-        Log.trace("LED::on()" CR);
         digitalWrite(mPin, HIGH);
         mLedOn = true;
     }
 
     void off() {
-        Log.trace("LED::off()" CR);
         digitalWrite(mPin, LOW);
         mLedOn = false;
     }
 
     void toggle() {
-        Log.trace("LED::toggle() wasOn=%T" CR, mLedOn);
         if (mLedOn) {
             off();
         } else {
@@ -111,11 +100,9 @@ public:
         , mLongPressedFlag(false)
         , mDoubleClickedFlag(false)
     {
-        Log.trace("Button::Button() pin=%d" CR, pin);
     }
 
     bool begin() override {
-        Log.trace("Button::begin()" CR);
         mButton.attachClick(onClickStatic, this);
         mButton.attachLongPressStop(onLongPressStatic, this);
         mButton.attachDoubleClick(onDoubleClickStatic, this);
@@ -124,7 +111,6 @@ public:
     }
 
     bool start() override {
-        Log.trace("Button::start()" CR);
         mClickedFlag = false;
         mLongPressedFlag = false;
         mDoubleClickedFlag = false;
@@ -133,12 +119,10 @@ public:
     }
 
     void stop() override {
-        Log.trace("Button::stop()" CR);
         mState = smOFF;
     }
 
     void end() override {
-        Log.trace("Button::end()" CR);
         stop();
     }
 
@@ -151,7 +135,6 @@ public:
     bool wasPressed() {
         if (mClickedFlag) {
             mClickedFlag = false;
-            Log.trace("Button::wasPressed() returning true" CR);
             return true;
         }
         return false;
@@ -176,17 +159,14 @@ public:
 private:
     static void onClickStatic(void* ptr) {
         static_cast<Button*>(ptr)->mClickedFlag = true;
-        Log.trace("Button::onClick()" CR);
     }
 
     static void onLongPressStatic(void* ptr) {
         static_cast<Button*>(ptr)->mLongPressedFlag = true;
-        Log.trace("Button::onLongPress()" CR);
     }
 
     static void onDoubleClickStatic(void* ptr) {
         static_cast<Button*>(ptr)->mDoubleClickedFlag = true;
-        Log.trace("Button::onDoubleClick()" CR);
     }
 
     OneButton mButton;
@@ -207,7 +187,6 @@ public:
     {}
 
     bool begin() override {
-        Log.trace("LedButtonAction::begin()" CR);
         bool ok = true;
         if (mLed) ok &= mLed->begin();
         if (mButton) ok &= mButton->begin();
@@ -215,7 +194,6 @@ public:
     }
 
     void end() override {
-        Log.trace("LedButtonAction::end()" CR);
         if (mLed) mLed->end();
         if (mButton) mButton->end();
     }
@@ -228,7 +206,6 @@ protected:
         if (mButton) {
             mButton->tick();
             if (mButton->wasPressed()) {
-                Log.trace("LedButtonAction::checkButton() button pressed" CR);
                 requestExit(EXIT_BUTTON_PRESS);
                 return true;
             }
@@ -245,7 +222,6 @@ public:
     LedOffAction(LED* led, Button* button) : LedButtonAction(led, button) {}
 
     void onEnter() override {
-        Log.trace("LedOffAction::onEnter()" CR);
         if (mLed) mLed->off();
         if (mButton) mButton->start();
     }
@@ -256,7 +232,6 @@ public:
     }
 
     void onExit() override {
-        Log.trace("LedOffAction::onExit()" CR);
         if (mButton) mButton->stop();
     }
 };
@@ -269,7 +244,6 @@ public:
     LedOnAction(LED* led, Button* button) : LedButtonAction(led, button) {}
 
     void onEnter() override {
-        Log.trace("LedOnAction::onEnter()" CR);
         if (mLed) mLed->on();
         if (mButton) mButton->start();
     }
@@ -280,7 +254,6 @@ public:
     }
 
     void onExit() override {
-        Log.trace("LedOnAction::onExit()" CR);
         if (mButton) mButton->stop();
     }
 };
@@ -297,7 +270,6 @@ public:
     {}
 
     void onEnter() override {
-        Log.trace("LedBlinkAction::onEnter() interval=%lu" CR, mIntervalMs);
         if (mLed) mLed->on();
         if (mButton) mButton->start();
         mLastToggleTime = millis();
@@ -313,7 +285,6 @@ public:
     }
 
     void onExit() override {
-        Log.trace("LedBlinkAction::onExit()" CR);
         if (mButton) mButton->stop();
         if (mLed) mLed->off();
     }
@@ -372,26 +343,22 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
 
-    // Initialize logging - set to TRACE level for detailed output
-    // Change to LOG_LEVEL_NOTICE for less verbose output
-    Log.begin(LOG_LEVEL_TRACE, &Serial);
-
-    Log.notice("LED State Machine Example" CR);
-    Log.notice("Press button to cycle: OFF -> ON -> SLOW -> FAST -> OFF" CR);
+    Serial.println("LED State Machine Example");
+    Serial.println("Press button to cycle: OFF -> ON -> SLOW -> FAST -> OFF");
 
     if (!fsm.begin()) {
-        Log.error("FSM begin failed!" CR);
+        Serial.println("ERROR: FSM begin failed!");
         return;
     }
 
     if (!fsm.start(&STATE_OFF)) {
-        Log.error("FSM start failed!" CR);
+        Serial.println("ERROR: FSM start failed!");
         return;
     }
 
     STATE_ON.setTimeout(5000);  // Auto-exit ON state after 5 seconds
 
-    Log.notice("FSM started in OFF state" CR);
+    Serial.println("FSM started in OFF state");
 }
 
 // loop() is provided by smMachine.cpp - do not define here

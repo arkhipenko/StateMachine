@@ -1,6 +1,5 @@
 #include <Arduino.h>
-#include <ArduinoLog.h>
-#include "smMachine.h"
+#include "StateMachine.h"
 #include "LED.h"
 #include "Button.h"
 #include "LedActions.h"
@@ -50,26 +49,22 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
 
-    // Initialize logging - set to TRACE level for detailed output
-    // Change to ARDUINO_LOG_LEVEL_NOTICE for less verbose output
-    Log.begin(ARDUINO_LOG_LEVEL_TRACE, &Serial);
-
-    Log.notice("LED State Machine Example" CR);
-    Log.notice("Press button to cycle: OFF -> ON -> SLOW -> FAST -> OFF" CR);
+    Serial.println("LED State Machine Example");
+    Serial.println("Press button to cycle: OFF -> ON -> SLOW -> FAST -> OFF");
 
     if (!fsm.begin()) {
-        Log.error("FSM begin failed!" CR);
+        Serial.println("ERROR: FSM begin failed!");
         return;
     }
 
     if (!fsm.start(&STATE_OFF)) {
-        Log.error("FSM start failed!" CR);
+        Serial.println("ERROR: FSM start failed!");
         return;
     }
 
     STATE_ON.setTimeout(5000);  // Auto-exit ON state after 5 seconds
 
-    Log.notice("FSM started in OFF state" CR);
+    Serial.println("FSM started in OFF state");
 }
 
 // loop() is provided by smMachine.cpp
